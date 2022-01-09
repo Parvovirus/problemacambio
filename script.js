@@ -36,10 +36,10 @@ function iniciarCaja() {
     caja = contarDinero(cajita);
 
     calcularTotal(caja);
-    console.log(caja);
+    //console.log(caja);
     // La suma del total de lo que hay en la caja
     var contTotal = document.createElement("p");
-    var texTotal = document.createTextNode(`Total de la caja: ${caja[1][1]}`);
+    var texTotal = document.createTextNode(`Total de la caja: ${caja[1][0][15]}`);
     contTotal.appendChild(texTotal);
     document.body.appendChild(contTotal);
 
@@ -62,17 +62,17 @@ function pagar() {
     }
     pago = contarDinero(paguita); // pago = ([],paguita)
     // console.log(pago);
-    pago = (calcularTotal(pago));  // pago = ([],paguita, total)
-    // console.log(pago);
+    pago = calcularTotal(pago);  // pago = ([],paguita, total)
+   
     let precio = 50;
     //Es la devolción, el array del ticket
     let cambio = [[], []];
 
     //La diferencia de lo que paga la persona con el precio del producto.
     //Devolver = NumeroTotal.  pago[1][pago[1].length - 1] --> Total en numero del pago.
-    let devolver = pago[1][pago[1].length - 1] - precio;
+    let devolver = pago[1][0][pago[1][0].length - 1] - precio;
     devolver = Math.round(devolver * 100) / 100
-    if (devolver > caja[1][caja[1].length - 1]) {
+    if (devolver > caja[1][0][caja[1][0].length - 1]) {
          
         // para meter en el body el ticket
         var contCambio = document.createElement("p");
@@ -81,19 +81,20 @@ function pagar() {
         document.body.appendChild(contCambio);
 
     } else {
-        if (devolver == caja[1][caja[1].length - 1]) {
-
+        if (devolver == caja[1][0][caja[1][0].length - 1]) {
             cambio[0] = caja[0].slice();
             cambio[1] = caja[1].slice();
-            caja = vaciarCaja(caja);
+            // caja = vaciarCaja(caja);
+            console.log(cambio);
             mostrarCambio(cambio);
+
         } else {
             let posicion = (primerElemento(devolver, caja));
             cambio = [["500", "200", "100", "50", "20", "10", "5", "2", "1",
                 "0.50", "0.20", "0.10", "0.05", "0.02", "0.01"], []];
             inicializarCambio(cambio, cambio[0].length);
             // function recopilarCambio(devolver, caja, cambio, posicion) {
-            for (let i = posicion; i < caja[1].length - 1; i++) {
+            for (let i = posicion; i < caja[1][0].length - 1; i++) {
                 [devolver, caja, cambio] = recopilarCambio(devolver, caja, cambio, i);
             }
             //mostrarCambio(cambio);
@@ -118,7 +119,7 @@ const calcularTotal = function (cash) {
         // console.log(total);
     }
     cash[0].push("total");
-    cash[1].push(Math.round(total * 100) / 100);
+    cash[1][0].push(Math.round(total * 100) / 100);
 
     return cash;
 
@@ -129,16 +130,18 @@ const calcularTotal = function (cash) {
 
 //FUNCION PARA CUANDO HAY QUE DEVOLVER JUSTO TODO LO QUE TIENE LA CAJA
 function vaciarCaja(caja) {
-    const values = caja[1];
+    const keys = caja[0];
+    const values = caja[1][0];
     for (let i = 0; i < values.length; i++) {
+        caja[keys[i]];
         values[i] = 0;
-        // console.log(caja[keys[i]]);
     }
     return caja;
 }
 
 // FUNCION QUE MUESTRA EL CAMBIO EN ALERT (CMABIARLO A DOM)
 function mostrarCambio(dinero) {
+    console.log("hola");
     var contDiv = document.createElement("div");
     contDiv.setAttribute("id","devo");
     document.body.appendChild(contDiv);
@@ -154,21 +157,22 @@ function mostrarCambio(dinero) {
     const values = dinero[1][0];
     // [Array(15), 50]
     for (let i = 0; i < keys.length; i++) {
-        ;
+        
         // para mostrar el cambio
         var contCambio = document.createElement("p");
         var texCambio = document.createTextNode( `${keys[i]} de ${values[i]},`);
         contCambio.appendChild(texCambio);
         contDevo.appendChild(contCambio);
     }
-    // alert(cadenaCambio)
+
+    //  alert(cadenaCambio)
        
 }
 
 
 //FUNCION BUSCA LA POSICION A EMPEZAR A PAGAR
 function primerElemento(parteEntera, dinero) {
-    // const values = dinero[1];
+   // const values = dinero[1];
     const keys = dinero[0];
     // console.log(parteEntera);
     let i = 0;
