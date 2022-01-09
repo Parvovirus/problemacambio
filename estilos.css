@@ -1,0 +1,15 @@
+.principal{
+    display: flex;
+    width: 50%;
+  justify-content: space-around;
+}
+#cliente , #caja{
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
