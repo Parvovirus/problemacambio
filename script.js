@@ -62,7 +62,7 @@ function pagar() {
 
     pago = calcularTotal(pago);  // pago = ([],paguita, total)
 
-    let precio = 73;
+    let precio = 50;
     //Es la devolción, el array del ticket
     let cambio = [[], []];
 
@@ -72,81 +72,94 @@ function pagar() {
 
     devolver = Math.round(devolver * 100) / 100;
 
-
-    if (devolver > caja[1][0][caja[1][0].length - 1]) {
-
+    if (devolver < 0) {
         // para meter en el body el ticket
         var contCambio = document.createElement("p");
-        var texCambio = document.createTextNode('No disponemos de cambio para tu compra, gracias y hasta luego');
+        var texCambio = document.createTextNode('Falta pasta');
         contCambio.appendChild(texCambio);
         document.body.appendChild(contCambio);
-
     } else {
-        //Para cuando no tenemos que devolver nada. Pago es justo.
-        if (devolver == 0) {
-            console.log("Ya está, has pagado justo");
+        if (devolver > caja[1][0][caja[1][0].length - 1]) {
+
+            // para meter en el body el ticket
+            var contCambio = document.createElement("p");
+            var texCambio = document.createTextNode('No disponemos de cambio para tu compra, gracias y hasta luego');
+            contCambio.appendChild(texCambio);
+            document.body.appendChild(contCambio);
 
         } else {
-            //Para cuando devolvamos todo lo que tenemos en la caja.
-            if (devolver == caja[1][0][caja[1][0].length - 1]) {
-                cambio[0] = caja[0].slice();
-                cambio[1] = caja[1].slice();
-                mostrarCambio(cambio);
-                caja = vaciarCaja(caja);
-                caja[0] = pago[0].slice();
-                caja[1] = pago[1].slice();
+            //Para cuando no tenemos que devolver nada. Pago es justo.
+            if (devolver == 0) {
+                console.log("Ya está, has pagado justo");
 
             } else {
-                let posicion = (primerElemento(devolver, caja));
-                cambio = [["500", "200", "100", "50", "20", "10", "5", "2", "1",
-                    "0.50", "0.20", "0.10", "0.05", "0.02", "0.01"], []];
-                inicializarCambio(cambio, cambio[0].length);
-                //console.log(cambio);
+                //Para cuando devolvamos todo lo que tenemos en la caja.
+                if (devolver == caja[1][0][caja[1][0].length - 1]) {
+                    cambio[0] = caja[0].slice();
+                    cambio[1] = caja[1].slice();
+                    mostrarCambio(cambio);
+                    caja = vaciarCaja(caja);
+                    caja[0] = pago[0].slice();
+                    caja[1] = pago[1].slice();
 
-                for (let i = posicion; i < caja[1][0].length - 1; i++) {
-                    [devolver, caja, cambio] = recopilarCambio(devolver, caja, cambio, i);
-                }
-                console.log(cambio);
-
-                if (devolver > 0) {
-
-                    console.log(pago[1][0][5]);
-                    // Sumamos a la caja el pago del cliente.
-                    for (i = 0; i < caja[0].length - 1; i++) {
-                        caja[1][0][i] = (caja[1][0][i]) + (pago[1][0][i]);
-                    }
+                } else {
                     let posicion = (primerElemento(devolver, caja));
                     cambio = [["500", "200", "100", "50", "20", "10", "5", "2", "1",
                         "0.50", "0.20", "0.10", "0.05", "0.02", "0.01"], []];
                     inicializarCambio(cambio, cambio[0].length);
+                    //console.log(cambio);
 
                     for (let i = posicion; i < caja[1][0].length - 1; i++) {
                         [devolver, caja, cambio] = recopilarCambio(devolver, caja, cambio, i);
                     }
+                    console.log(cambio);
 
-                    if (devolver == 0) {
-                        console.log(caja);
+                    if (devolver > 0) {
+
+                        console.log(pago[1][0][5]);
+                        // Sumamos a la caja el pago del cliente.
+                        for (i = 0; i < caja[0].length - 1; i++) {
+                            caja[1][0][i] = (caja[1][0][i]) + (pago[1][0][i]);
+                        }
+                        let posicion = (primerElemento(devolver, caja));
+                        cambio = [["500", "200", "100", "50", "20", "10", "5", "2", "1",
+                            "0.50", "0.20", "0.10", "0.05", "0.02", "0.01"], []];
+                        inicializarCambio(cambio, cambio[0].length);
+
+                        for (let i = posicion; i < caja[1][0].length - 1; i++) {
+                            [devolver, caja, cambio] = recopilarCambio(devolver, caja, cambio, i);
+                        }
+
+                        if (devolver == 0) {
+                            console.log(caja);
+                            mostrarCambio(cambio);
+
+                        } else {
+                            console.log(caja);
+                            console.log(cambio);
+
+                            for (i = 0; i < caja[0].length - 1; i++) {
+                                caja[1][0][i] = (caja[1][0][i]) - (cambio[1][i]);
+                            }
+                            console.log(caja);
+
+                            console.log("no hay cambio suficiente pero si tenemos dinero en la caja");
+                            var contDevo = document.getElementById("devo");
+
+                            var contCambio = document.createElement("p");
+                            var texCambio = document.createTextNode("no hay cambio suficiente pero si tenemos dinero en la caja");
+                            contCambio.appendChild(texCambio);
+                            document.body.appendChild(contCambio);
+                        }
+
+
+                        //Restablecer el dniero de nuevo a la caja
+                    } else {
                         mostrarCambio(cambio);
 
-                    } else {
-                        console.log(caja);
-                        console.log(cambio);
-
-                        for (i = 0; i < caja[0].length - 1; i++) {
-                            caja[1][0][i] = (caja[1][0][i]) - (cambio[1][i]);
-                        }
-                        console.log(caja);
-                      
-                        console.log("no hay cambio suficiente pero si tenemos dinero en la caja");
                     }
 
-
-                    //Restablecer el dniero de nuevo a la caja
-                } else {
-                    mostrarCambio(cambio);
-
                 }
-
             }
         }
     }
